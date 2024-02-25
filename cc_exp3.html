@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+  #canvas {
+    width: 400px;
+    height: 400px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .shape {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+  }
+
+  .square {
+    background-color: red;
+  }
+
+  .triangle-up {
+    width: 0;
+    height: 0;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-bottom: 50px solid green;
+  }
+
+  .rectangle {
+    height: 50px;
+    width: 100px;
+    background-color: blue;
+  }
+
+  #transformations {
+    margin-top: 20px;
+  }
+</style>
+<title>2D Transformation App</title>
+</head>
+<body>
+  <h1>2D Transformation App</h1>
+
+  <div id="canvas" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+  <div id="square" class="shape square" draggable="true" ondragstart="drag(event)"></div>
+  <div id="triangle" class="shape triangle-up" draggable="true" ondragstart="drag(event)"></div>
+  <div id="rectangle" class="shape rectangle" draggable="true" ondragstart="drag(event)"></div>
+
+  <div id="transformations">
+    <button onclick="applyTranslate()">Translate</button>
+    <button onclick="applyScale()">Scale</button>
+    <button onclick="applyRotate()">Rotate</button>
+  </div>
+
+  <script>
+    let transformationCount = 0;
+    let currentShape = null;
+
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+    
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+    
+    function drop(ev) {
+      ev.preventDefault();
+      var data = ev.dataTransfer.getData("text");
+      ev.target.appendChild(document.getElementById(data));
+    }
+
+    function applyTranslate() {
+      if (currentShape) {
+        transformationCount++;
+        currentShape.style.transform = `translate(${transformationCount * 10}px, ${transformationCount * 10}px)`;
+      }
+    }
+
+    function applyScale() {
+      if (currentShape) {
+        transformationCount++;
+        currentShape.style.transform = `scale(${1 + transformationCount * 0.1})`;
+      }
+    }
+
+    function applyRotate() {
+      if (currentShape) {
+        transformationCount++;
+        currentShape.style.transform = `rotate(${transformationCount * 10}deg)`;
+      }
+    }
+
+    document.addEventListener('click', function(event) {
+      if (event.target.classList.contains('shape')) {
+        currentShape = event.target;
+      }
+    });
+  </script>
+</body>
+</html>
